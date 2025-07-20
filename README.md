@@ -34,7 +34,7 @@ A FastAPI-based RESTful service that predicts diabetes risk using a trained mach
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Stack3
 - Python, FastAPI, Scikit-learn
 - Docker
 - Joblib, NumPy, Pydantic
@@ -48,3 +48,56 @@ Install dependencies:
 ```bash
 pip install -r requirements.txt
 
+# Cloud-Native Diabetes Risk Prediction API 🩺
+
+This project builds a cloud-native machine learning API that predicts the risk of diabetes from health data. It uses a trained ML model served via FastAPI, containerized with Docker, and set up for CI/CD using GitHub Actions.
+
+---
+
+## 🚀 Features
+
+- 🔍 Real-time diabetes risk prediction using an ML model
+- ⚙️ Built with FastAPI + scikit-learn
+- 🐳 Dockerized for portability
+- ✅ Tested with Postman
+- 🔄 CI/CD pipeline with GitHub Actions
+- 📦 Ready for cloud deployment (EC2 or GCP)
+
+---
+
+## 🧠 Model Details
+
+- Dataset: [Pima Indians Diabetes Dataset](https://www.kaggle.com/datasets/uciml/pima-indians-diabetes-database)
+- Algorithm: Logistic Regression
+- Trained on 70% of data, tested on 30%
+- Output: Positive (High Risk) or Negative (Low Risk)
+
+---
+
+## 📦 Tech Stack
+
+| Tool        | Purpose                          |
+|-------------|----------------------------------|
+| **Python**  | Machine learning + FastAPI       |
+| **FastAPI** | REST API framework               |
+| **Docker**  | Containerization                 |
+| **GitHub Actions** | CI/CD automation         |
+| **Postman** | API testing                      |
+
+---
+
+## 🧪 API Usage
+
+### Endpoint: `/predict` (POST)
+
+```json
+{
+  "Pregnancies": 2,
+  "Glucose": 120,
+  "BloodPressure": 70,
+  "SkinThickness": 20,
+  "Insulin": 85,
+  "BMI": 28.4,
+  "DiabetesPedigreeFunction": 0.5,
+  "Age": 35
+}
