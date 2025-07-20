@@ -22,3 +22,30 @@ This project uses the Pima Indians Diabetes dataset to train a machine learning 
 
 # Cloud-Native-ML-DiabetesRiskPrediction-API
 
+A FastAPI-based RESTful service that predicts diabetes risk using a trained machine learning model. The application is containerized with Docker for consistent, portable deployment.
+
+---
+
+## 🔍 Features
+- Predict diabetes risk from medical input data using a trained `RandomForestClassifier`
+- REST API built with FastAPI
+- Interactive Swagger docs at `/docs`
+- Fully Dockerized
+- Ready for CI/CD & cloud deployment
+
+---
+
+## 🛠️ Tech Stack
+- Python, FastAPI, Scikit-learn
+- Docker
+- Joblib, NumPy, Pydantic
+
+---
+
+## 📦 Requirements
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+
