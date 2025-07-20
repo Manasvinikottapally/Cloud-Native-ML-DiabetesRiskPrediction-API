@@ -1,5 +1,5 @@
 
-# Diabetes Risk Prediction - ML API (Project Week 1)
+# Diabetes Risk Prediction - ML API
 
 This project uses the Pima Indians Diabetes dataset to train a machine learning model that predicts the likelihood of diabetes based on patient health features.
 
@@ -20,7 +20,6 @@ This project uses the Pima Indians Diabetes dataset to train a machine learning 
 - CI/CD with Jenkins
 - Cloud deployment on AWS/GCP
 
-# Cloud-Native-ML-DiabetesRiskPrediction-API
 
 A FastAPI-based RESTful service that predicts diabetes risk using a trained machine learning model. The application is containerized with Docker for consistent, portable deployment.
 
