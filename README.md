@@ -101,3 +101,33 @@ This project builds a cloud-native machine learning API that predicts the risk o
   "DiabetesPedigreeFunction": 0.5,
   "Age": 35
 }
+
+yaml code
+
+---
+
+## 🐳 Docker Instructions
+
+**Build and Push Docker Image:**
+
+```bash
+# Local build
+docker build -t manasvini26/diabetes-api:latest .
+
+# Push to Docker Hub
+docker login
+docker push manasvini26/diabetes-api:latest
+
+#Terraform deployment steps
+cd terraform/
+
+# Initialize Terraform
+terraform init
+
+# Preview plan
+terraform plan
+
+# Apply configuration
+terraform apply
+
+

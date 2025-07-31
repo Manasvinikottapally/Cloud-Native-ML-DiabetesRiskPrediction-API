@@ -1,4 +1,22 @@
-venv/
+# Python
 __pycache__/
-*.pkl
-*.ipynb_checkpoints
+*.pyc
+
+# Docker
+*.log
+*.pid
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# Secrets/Keys
+*.pem
+.env
+
+# OS
+.DS_Store
+
+# VSCode
+.vscode/
