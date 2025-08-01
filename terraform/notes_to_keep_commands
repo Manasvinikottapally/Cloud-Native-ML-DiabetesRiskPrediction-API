@@ -1,0 +1,6 @@
+# Optional: Move to a standard location if you want
+            mv prometheus-2.52.0.linux-amd64 prometheus
+            cd prometheus
+
+# Start Prometheus manually if needed:
+            # ./prometheus --config.file=prometheus.yml

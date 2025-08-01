@@ -2,12 +2,16 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
 import numpy as np
+from prometheus_fastapi_instrumentator import Instrumentator
 
 # Load the model
 model = joblib.load("diabetes_model.pkl")
 
 # Initialize the FastAPI app
 app = FastAPI()
+
+# Enable metrics collection and exposure at /metrics
+Instrumentator().instrument(app).expose(app)
 
 # Define input schema
 class PatientData(BaseModel):

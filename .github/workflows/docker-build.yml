@@ -1,33 +1,65 @@
-name: Build and Test Diabetes API
+name: Build, Push Docker Image & Deploy to EC2 with Prometheus
 
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
-  build:
+  build-push-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-      - name: Run tests (placeholder)
-        run: |
-          echo "No tests yet. Add pytest here later."
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker image
-        run: |
-          docker build -t diabetes-api .
+    - name: Log in to DockerHub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./backend
+        push: true
+        tags: manasvini26/diabetes-api:latest
+        platforms: linux/amd64
+
+    - name: SSH into EC2 and deploy Docker container & Prometheus
+      uses: appleboy/ssh-action@v0.1.8
+      with:
+        host: ${{ secrets.EC2_PUBLIC_IP }}              # ✅ Replace with your EC2 Public IP as a secret
+        username: ubuntu
+        key: ${{ secrets.EC2_PEM_KEY }}                  # ✅ Add your PEM file contents as a secret (not the file path)
+        script: |
+          sudo apt update -y
+          sudo apt install -y docker.io wget tar
+          sudo systemctl start docker
+
+          echo "Pulling latest Docker image..."
+          sudo docker pull manasvini26/diabetes-api:latest
+
+          echo "Stopping and removing old containers..."
+          sudo docker stop $(sudo docker ps -q) || true
+          sudo docker rm $(sudo docker ps -a -q) || true
+
+          echo "Running latest container..."
+          sudo docker run -d -p 80:8080 manasvini26/diabetes-api:latest
+
+          echo "Installing Prometheus..."
+          wget https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
+          tar -xvf prometheus-2.52.0.linux-amd64.tar.gz

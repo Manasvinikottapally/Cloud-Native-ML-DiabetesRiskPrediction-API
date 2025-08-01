@@ -130,4 +130,96 @@ terraform plan
 # Apply configuration
 terraform apply
 
+📊 Prometheus Integration for Monitoring
+This project includes built-in support for Prometheus to monitor the FastAPI-based Diabetes Prediction API in real time.
+
+✅ What is Monitored?
+- API request metrics (total requests, duration, status codes)
+
+- Python system metrics (memory, garbage collection, CPU, etc.)
+
+- Custom FastAPI endpoints via Prometheus /metrics path
+
+⚙️ Prometheus Setup & Automation Steps
+Build FastAPI app with Prometheus instrumentation using prometheus-fastapi-instrumentator
+
+Expose /metrics endpoint for live API and system metrics
+
+Automate Prometheus installation and extraction via Terraform EC2 user_data
+
+Configure Prometheus to scrape metrics from the FastAPI container on port 80
+
+Open Prometheus UI access via port 9090 using AWS Security Group rules
+
+View and query metrics at http://<EC2-PUBLIC-IP>:9090 to monitor API performance
+
+
+wget https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
+tar -xvf prometheus-2.52.0.linux-amd64.tar.gz
+
+#Library to access /Matric
+from prometheus_fastapi_instrumentator import Instrumentator
+Instrumentator().instrument(app).expose(app)
+Configure Prometheus Target in prometheus.yml
+Prometheus is configured to scrape metrics from the FastAPI app running on port 80:
+
+#in scrap configuration file
+yaml
+Copy
+Edit
+scrape_configs:
+  - job_name: 'fastapi-app'
+    static_configs:
+      - targets: ['localhost:80']
+Access Prometheus UI
+After EC2 boots up, visit:
+
+cpp
+Copy
+Edit
+http://<your-ec2-public-ip>:9090
+Use queries like:
+
+nginx
+Copy
+Edit
+http_requests_total
+process_resident_memory_bytes
+Security Group Opened for Prometheus
+Terraform opens port 9090 to allow external access to the Prometheus UI:
+
+hcl
+Copy
+Edit
+ingress {
+  from_port   = 9090
+  to_port     = 9090
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+
+
+✅ CI/CD Pipeline with GitHub Actions
+This project now includes a fully automated CI/CD pipeline using GitHub Actions, Docker Hub, and AWS EC2.
+
+🔁 CI/CD Workflow Overview
+On every push to the main branch:
+
+GitHub Actions is triggered.
+
+The FastAPI app is built into a Docker image using buildx.
+
+The Docker image is pushed to Docker Hub:
+manasvini26/diabetes-api:latest
+
+GitHub Actions SSHs into the EC2 instance using a .pem key.
+
+On EC2:
+
+The latest Docker image is pulled and deployed.
+
+Existing containers are stopped and removed.
+
+A new container is launched on port 80.
+
+Prometheus is downloaded and extracted for metrics monitoring.
 

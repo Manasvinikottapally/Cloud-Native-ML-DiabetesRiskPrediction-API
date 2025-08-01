@@ -4,7 +4,7 @@ provider "aws" {
 
 resource "aws_security_group" "web_sg" {
   name        = "allow_http_ssh"
-  description = "Allow HTTP and SSH access"
+  description = "Allow SSH, HTTP, and Prometheus (9090) access"
 
   ingress {
     from_port   = 22
@@ -18,6 +18,14 @@ resource "aws_security_group" "web_sg" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] # HTTP
+  }
+
+  ingress {
+    description = "Allow Prometheus UI"
+    from_port   = 9090
+    to_port     = 9090
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -40,7 +48,11 @@ resource "aws_instance" "ml_api_server" {
               apt install -y docker.io
               systemctl start docker
               docker pull manasvini26/diabetes-api:latest
+              docker stop $(docker ps -q) || true
+              docker rm $(docker ps -a -q) || true
               docker run -d -p 80:8080 manasvini26/diabetes-api:latest
+              wget https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
+              tar -xvf prometheus-2.52.0.linux-amd64.tar.gz
             EOF
 
   tags = {
