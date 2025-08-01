@@ -61,5 +61,5 @@ jobs:
           sudo docker run -d -p 80:8080 manasvini26/diabetes-api:latest
 
           echo "Installing Prometheus..."
-          wget https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
-          tar -xvf prometheus-2.52.0.linux-amd64.tar.gz
+          wget -q https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
+          tar -xvf prometheus-2.52.0.linux-amd64.tar.gz > /dev/null

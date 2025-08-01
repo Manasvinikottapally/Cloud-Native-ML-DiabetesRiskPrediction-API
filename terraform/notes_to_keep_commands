@@ -3,4 +3,4 @@
             cd prometheus
 
 # Start Prometheus manually if needed:
-            # ./prometheus --config.file=prometheus.yml
+            #./prometheus --config.file=prometheus.yml
