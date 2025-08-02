@@ -163,14 +163,31 @@ Instrumentator().instrument(app).expose(app)
 Configure Prometheus Target in prometheus.yml
 Prometheus is configured to scrape metrics from the FastAPI app running on port 80:
 
-#in scrap configuration file
-yaml
-Copy
-Edit
+after doing this
+# Optional: Move to a standard location if you want
+            mv prometheus-2.52.0.linux-amd64 prometheus
+            cd prometheus
+
+# Start Prometheus manually if needed:
+            ./prometheus --config.file=prometheus.yml
+
+#in scrap configuration file we need to add this (very important)
 scrape_configs:
   - job_name: 'fastapi-app'
     static_configs:
-      - targets: ['localhost:80']
+      - targets: ['localhost:80']  # or 'localhost:80' based on your app
+
+
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "prometheus"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ["localhost:9090"]
+
+      
 Access Prometheus UI
 After EC2 boots up, visit:
 
